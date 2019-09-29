@@ -1,0 +1,39 @@
+;[bp + 6] - addr PrevNumber
+Random.Initialize:
+        push bp, bx
+        mov bp, sp
+        mov bx, [bp + 6]
+
+        mov ah, $2C
+        int 21h
+        mov [bx], dx
+
+        pop bx, bp
+        ret 2
+
+; from [bp + 6] to [bp + 8]; [bp + 10] - addr PrevNumber
+GetRandom:
+        push bp, bx
+        mov bp, sp
+
+        xor dx, dx
+        mov cx, [bp + 8]
+        sub cx, [bp + 6]
+        inc cx        
+        mov bx, [bp + 10]
+        mov ax, [bx]
+
+        imul ax, 3;15
+        rol ax, 2
+        add ax, 3;1
+        
+        mov bx, [bp + 10]
+        mov [bx], ax
+        
+
+        div cx
+        add dx, [bp + 6]
+        mov ax, dx
+
+        pop bx, bp
+        ret 6      
